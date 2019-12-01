@@ -1,18 +1,39 @@
 #include "OutputFileHandler.h"
 
-void OutputFileHandler::m_check_file()
+void OutputFileHandler::CheckFile()
 {
-	if (!m_output_file.is_open())
+	if (!m_outputFile.is_open())
 		throw std::exception("File could not be opened");
 }
 
-void OutputFileHandler::WriteData(const DataBase & db)
+OutputFileHandler::OutputFileHandler(OutputFileHandler && other)
 {
-	std::unique_lock<std::mutex> protector(m_mtx);
+	m_fileName = std::move(other.m_fileName);
+	m_outputFile = std::move(other.m_outputFile);
+	WriteLock wLock(other.m_mtx);
+}
+
+OutputFileHandler & OutputFileHandler::operator=(OutputFileHandler && other)
+{
+	if (this == &other)
+	{
+		return *this;
+	}
+
+	m_fileName = std::move(other.m_fileName);
+	m_outputFile = std::move(other.m_outputFile);
+	WriteLock wLock(other.m_mtx);
+	return *this;
+}
+
+void OutputFileHandler::WriteData(const IDataBase& db)
+{
+	CheckFile();
+	WriteLock protector(m_mtx);
 	for (size_t i = 0; i < db.GetRecords(); i++)
 	{
 		auto record = db.GetRecord(i);
-		m_output_file << record.Date << " "
+		m_outputFile << record.Date << " "
 					  << record.Truck_Number << " "
 					  << record.Weight << "\n";
 	}
@@ -20,5 +41,6 @@ void OutputFileHandler::WriteData(const DataBase & db)
 
 void OutputFileHandler::AppendData(std::string data)
 {
-	m_output_file << data;
+	CheckFile();
+	m_outputFile << data;
 }

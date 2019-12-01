@@ -7,24 +7,28 @@
 
 class FileHandler
 {
-protected:
-	std::string m_file_name;
+private:
+	std::string m_fileName;
 	std::ifstream m_file;
-	std::string m_raw_data;
+	std::string m_rawData;
 
-	void m_check_file();
+	void CheckFile();
 
 public:
 	FileHandler() = default;
-	FileHandler(const std::string& file_name) : m_file_name(file_name), m_file(file_name), m_raw_data("") {}
+	explicit FileHandler(const std::string& file_name) : m_fileName(file_name), m_file(file_name), m_rawData("") {}
+	FileHandler(const FileHandler&) = delete;
+	FileHandler& operator=(const FileHandler&) = delete;
+	FileHandler(FileHandler&& other);
+	FileHandler& operator=(FileHandler&& other);
 	virtual ~FileHandler()
 	{
 		if (m_file.is_open())
 			m_file.close();
 	}
 
-	void GetFileRawData();
-	virtual void ParseFile(const FileParser& parser, DataBase& TruckDataBase);
+	void ReadFileRawData();
+	virtual void ParseFile(const IFileParser& parser, IDataBase& TruckDataBase);
 };
 
 #endif // !file_handler

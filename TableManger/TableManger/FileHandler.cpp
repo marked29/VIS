@@ -1,23 +1,42 @@
 #include "FileHandler.h"
 
-void FileHandler::m_check_file()
+void FileHandler::CheckFile()
 {
 	if (!m_file.is_open())
 		throw std::exception("File could not be opened");
 }
 
-void FileHandler::GetFileRawData()
+FileHandler::FileHandler(FileHandler && other)
+{
+	m_fileName = std::move(other.m_fileName);
+	m_file = std::move(other.m_file);
+	m_rawData = std::move(other.m_rawData);
+}
+
+FileHandler& FileHandler::operator=(FileHandler && other)
+{
+	if (this == &other)
+	{
+		return *this;
+	}
+
+	m_fileName = std::move(other.m_fileName);
+	m_file = std::move(other.m_file);
+	m_rawData = std::move(other.m_rawData);
+}
+
+void FileHandler::ReadFileRawData()
 {
 	char reader;
 
-	m_check_file();
+	CheckFile();
 
 	while (m_file.get(reader))
-		m_raw_data += reader;
+		m_rawData += reader;
 }
 
-void FileHandler::ParseFile(const FileParser& parser, DataBase & database)
+void FileHandler::ParseFile(const IFileParser& parser, IDataBase & database)
 {
-	m_check_file();
+	CheckFile();
 	parser.Parse(m_file, database);
 }

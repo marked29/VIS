@@ -1,4 +1,7 @@
-﻿  helpers.cpp
+﻿  FileHandler.cpp
+  OutputFileHandler.cpp
+  TruckDatabase.cpp
   main.cpp
   Создание кода...
+d:\c++\vis\1\tablemanger\tablemanger\filehandler.cpp(26): warning C4715: FileHandler::operator=: значение возвращается не при всех путях выполнения
   TableManger.vcxproj -> D:\C++\VIS\1\TableManger\Debug\TableManger.exe

@@ -5,10 +5,10 @@
 #include <istream>
 #include <string>
 
-class DataBaseParser : public FileParser
+class DataBaseParser : public IFileParser
 {
 public:
-	void Parse(std::ifstream& file, DataBase& database) const override;
+	void Parse(std::ifstream& file, IDataBase& database) const override;
 
 };
 

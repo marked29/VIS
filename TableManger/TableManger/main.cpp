@@ -2,11 +2,10 @@
 #include "TruckDatabase.h"
 #include "OutputFileHandler.h"
 
-#ifndef test
 int main()
 {
 	FileHandler file("table.txt");
-	std::unique_ptr<FileParser>  parser = std::make_unique<DataBaseParser>(DataBaseParser());
+	std::unique_ptr<IFileParser>  parser = std::make_unique<DataBaseParser>(DataBaseParser());
 	if (!parser)
 		return 1;
 
@@ -28,19 +27,3 @@ int main()
 	system("pause");
 	return 0;
 }
-#else
-
-int main()
-{
-	datetime::DateTime hellow;
-	hellow.date.day = 13;
-	hellow.date.month = 10;
-	hellow.date.year = 1990;
-	hellow.time.hours = 13;
-	hellow.time.minutes = 10;
-	std::cout << hellow << std::endl;
-	system("pause");
-	return 0;
-}
-
-#endif // test

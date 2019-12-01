@@ -1,14 +1,42 @@
 #include "TruckDatabase.h"
 
-bool TruckDatabase::database_is_empty() const
+bool TruckDatabase:: DatabaseIsEmpty() const
 {
-	return m_database.empty();
+	return m_dataBase.empty();
+}
+
+TruckDatabase::TruckDatabase(const Record & record)
+{
+	m_dataBase.emplace_back(record);
+}
+
+
+TruckDatabase & TruckDatabase::operator=(const TruckDatabase & other)
+{
+	if (this == &other)
+	{
+		return *this;
+	}
+
+	m_dataBase = other.m_dataBase;
+	return *this;
+}
+
+TruckDatabase & TruckDatabase::operator=(TruckDatabase && other)
+{
+	if (this == &other)
+	{
+		return *this;
+	}
+
+	m_dataBase = std::move(other.m_dataBase);
+	return *this;
 }
 
 void TruckDatabase::DisplayData() const
 {
 	std::cout << "======================================================================================\n";
-	for (const auto& record : m_database)
+	for (const auto& record : m_dataBase)
 	{
 		std::cout << record.Date << "\t " << record.Truck_Number << "\t " << record.Weight << "\n";
 	}
@@ -16,11 +44,11 @@ void TruckDatabase::DisplayData() const
 
 std::set<std::string> TruckDatabase::FindUniqueTrucks() const
 {
-	if (database_is_empty())
+	if ( DatabaseIsEmpty())
 		return std::set<std::string>();
 
 	std::set<std::string> unique_trucks;
-	for (const auto& truck : m_database)
+	for (const auto& truck : m_dataBase)
 		unique_trucks.insert(truck.Truck_Number);
 
 	return unique_trucks;
@@ -28,7 +56,7 @@ std::set<std::string> TruckDatabase::FindUniqueTrucks() const
 
 std::vector<TruckDatabase> TruckDatabase::SplitDatabase() const
 {
-	if (database_is_empty())
+	if ( DatabaseIsEmpty())
 		return std::vector<TruckDatabase>{};
 
 	auto unique_trucks = FindUniqueTrucks();
@@ -37,7 +65,7 @@ std::vector<TruckDatabase> TruckDatabase::SplitDatabase() const
 	int tableNo = 0;
 	for (const auto& truck : unique_trucks)
 	{
-		for (auto record : m_database)
+		for (auto record : m_dataBase)
 		{
 			if (record.Truck_Number == truck)
 			{
@@ -52,7 +80,7 @@ std::vector<TruckDatabase> TruckDatabase::SplitDatabase() const
 double TruckDatabase::CalculateTotalWeight() const 
 {
 	double total_weight = 0;
-	for (auto const record : m_database)
+	for (auto const record : m_dataBase)
 	{
 		total_weight += record.Weight;
 	}
@@ -61,31 +89,31 @@ double TruckDatabase::CalculateTotalWeight() const
 
 void TruckDatabase::SortByDate()
 {
-	if (database_is_empty())
+	if ( DatabaseIsEmpty())
 		return;
 
-	std::sort(m_database.begin(), m_database.end(), [](const Record& date1, const Record& date2)
+	std::sort(m_dataBase.begin(), m_dataBase.end(), [](const Record& date1, const Record& date2)
 		{
-			return date1.Date < date2.Date ? true : false;
+			return date1.Date < date2.Date;
 		});
 }
 
 void TruckDatabase::AddRecord(const Record & record) 
 {
-	m_database.push_back(record);
+	m_dataBase.push_back(record);
 }
 
 const size_t TruckDatabase::GetRecords() const noexcept
 {
-	return m_database.size();
+	return m_dataBase.size();
 }
 
 const Record & TruckDatabase::GetRecord(int index) const
 {
-	return m_database.at(index);
+	return m_dataBase.at(index);
 }
 
 Record& TruckDatabase::GetRecord(int index)
 {
-	return m_database.at(index);
+	return m_dataBase.at(index);
 }

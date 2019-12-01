@@ -1,6 +1,6 @@
 #include "DataBaseParser.h"
 
-void DataBaseParser::Parse(std::ifstream & file, DataBase & database) const
+void DataBaseParser::Parse(std::ifstream & file, IDataBase& database) const
 {
 	for (std::string date = "", truck_number = "", weight = "";
 		!file.eof();

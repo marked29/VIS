@@ -2,13 +2,12 @@
 #define file_parser_
 #include "DataBase.h"
 
-class FileParser
+class IFileParser
 {
 public:
-	FileParser() = default;
-	virtual ~FileParser() = default;
-	// DataBase should be some 
-	virtual void Parse(std::ifstream&, DataBase&) const = 0;
+	IFileParser() = default;
+	virtual ~IFileParser() = default;
+	virtual void Parse(std::ifstream&, IDataBase&) const = 0;
 };
 
 #endif // !file_parser_

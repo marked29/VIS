@@ -7,22 +7,30 @@
 
 class OutputFileHandler
 {
-protected:
-	std::string m_file_name = "";
-	std::ofstream m_output_file;
-	std::mutex m_mtx;
+private:
+	std::string m_fileName = "";
+	std::ofstream m_outputFile;
 
-	void m_check_file();
+	using MutexType = std::mutex;
+	using WriteLock = std::unique_lock<MutexType>;
+	
+	mutable MutexType m_mtx;
+
+	void CheckFile();
 public:
 	OutputFileHandler() = default;
-	OutputFileHandler(std::string filename) : m_file_name(filename), m_output_file(m_file_name) {};
+	explicit OutputFileHandler(std::string filename) : m_fileName(filename), m_outputFile(m_fileName) {};
+	OutputFileHandler(const OutputFileHandler&) = delete;
+	OutputFileHandler& operator= (const OutputFileHandler&) = delete;
+	OutputFileHandler(OutputFileHandler&& other);
+	OutputFileHandler& operator=(OutputFileHandler&& other);
 	virtual ~OutputFileHandler() 
 	{
-		if (m_output_file.is_open())
-			m_output_file.close();
+		if (m_outputFile.is_open())
+			m_outputFile.close();
 	}
 
-	virtual void WriteData(const DataBase& db);
+	virtual void WriteData(const IDataBase& db);
 	virtual void AppendData(std::string data);
 };
 

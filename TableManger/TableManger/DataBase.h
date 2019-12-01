@@ -6,7 +6,7 @@
 #include <set>
 #include <algorithm>
 
-class DataBase
+class IDataBase
 {
 public:
 	virtual void AddRecord(const Record& ) = 0;
