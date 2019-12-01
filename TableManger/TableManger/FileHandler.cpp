@@ -23,6 +23,8 @@ FileHandler& FileHandler::operator=(FileHandler && other)
 	m_fileName = std::move(other.m_fileName);
 	m_file = std::move(other.m_file);
 	m_rawData = std::move(other.m_rawData);
+
+	return *this;
 }
 
 void FileHandler::ReadFileRawData()
